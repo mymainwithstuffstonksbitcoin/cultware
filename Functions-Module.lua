@@ -133,8 +133,8 @@ functions.ready = function()
                     warn'ayo'
                     if MousePressed ~= true then MousePressed = true end 
                     local Target;Target = GetNearestTarget()
-                    if Target ~= nil then 
-                        warn'getting target'
+                    if Target ~= nil then
+                        warn(Target)
                         AimlockTarget = Target
                     end
                 end)
