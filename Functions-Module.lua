@@ -57,7 +57,8 @@ functions.ready = function()
         
         for i, v in next, Players:GetPlayers() do
             if v.Name ~= Client.Name then
-                if v.Character and v.Team ~= Client.Team then
+                --if v.Character and v.Team ~= Client.Team then
+                if v.Character then
                     local pos,aaaa = Camera:WorldToViewportPoint(v.Character.Head.Position);
                     local mouse = Uis:GetMouseLocation()
                     local magnitude = (Vec2(pos.X, pos.Y) - Vec2(mouse.X, mouse.Y)).magnitude;
@@ -78,7 +79,6 @@ functions.ready = function()
             if key.UserInputType == Enum.UserInputType.MouseButton2 and AimlockTarget == nil then
                 if MousePressed ~= true then MousePressed = true end 
                 local Target;Target = GetNearestTarget()
-                print(Target)
                 if Target ~= nil then
                     AimlockTarget = Target
                 end
@@ -115,7 +115,6 @@ functions.ready = function()
             if AimlockTarget and AimlockTarget.Character and AimlockTarget.Character:FindFirstChild(AimPart) then 
                 if FirstPerson == true then
                     if CanNotify == true then
-                        warn'modding'
                         if PredictMovement == true then
                             if Smoothness == true then
                                 --// The part we're going to lerp/smoothen \\--
@@ -141,15 +140,6 @@ functions.ready = function()
                 end
             end
         end
-         if CheckIfJumped == true and AimlockTarget then
-       if AimlockTarget.Character.Humanoid.FloorMaterial == Enum.Material.Air then
-    
-           AimPart = "RightFoot"
-       else
-         AimPart = OldAimPart
-    
-       end
-    end
     end)
 
     local AnimationModule = {
