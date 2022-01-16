@@ -11,7 +11,6 @@ functions.ready = function()
 
     local OldAimPart = "Head"
     local AimPart = "Head"
-    local AimlockKey = "q"
     local AimRadius = 30
     local ThirdPerson = true
     local FirstPerson = true
@@ -44,7 +43,7 @@ functions.ready = function()
     local Vec3 = Vector3.new
     local Vec2 = Vector2.new
 
-    local Aimlock, MousePressed, CanNotify = true, false, false
+    local Aimlock, MousePressed, CanNotify = false, false, false
     local AimlockTarget, OldPre
 
     local CiazwareUniversalAimbotLoaded = true
@@ -81,6 +80,7 @@ functions.ready = function()
                     if MousePressed ~= true then MousePressed = true end 
                     local Target;Target = GetNearestTarget()
                     if Target ~= nil then 
+                        warn'getting target'
                         AimlockTarget = Target
                     end
                 end)
@@ -114,7 +114,8 @@ functions.ready = function()
             end
         end
         if Aimlock == true and MousePressed == true then 
-            if AimlockTarget and AimlockTarget.Character and AimlockTarget.Character:FindFirstChild(AimPart) then 
+            if AimlockTarget and AimlockTarget.Character and AimlockTarget.Character:FindFirstChild(AimPart) then
+                print(FirstPerson,CanNotify,PredictMovement,Smoothness,PredictMovement,AimlockTarget)
                 if FirstPerson == true then
                     if CanNotify == true then
                         if PredictMovement == true then
