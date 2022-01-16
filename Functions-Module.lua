@@ -20,7 +20,7 @@ functions.ready = function()
     local CheckIfJumped = true
     local Smoothness = false
     local SmoothnessAmount = 0.035
-    local FakeLagSpeed = 1.0E-6
+    local FakeLagSpeed = 0.000001
 
     local services = setmetatable({ }, {
         __index = function(t,k)
@@ -51,7 +51,7 @@ functions.ready = function()
     local Target, PartMode, Partz, NotifMode, Prediction
     local SpinBotSpeed
 
-    local GetNearestTarget = function()
+    --[[local GetNearestTarget = function()
         local closestPlayer = nil;
         local shortestDistance = math.huge;
         
@@ -71,12 +71,66 @@ functions.ready = function()
         end
         
         return closestPlayer;
+    end]]
+    local GetNearestTarget = function()
+        -- Credits to whoever made this, i didnt make it, and my own mouse2plr function kinda sucks
+        local players = {}
+        local PLAYER_HOLD  = {}
+        local DISTANCES = {}
+        for i, v in pairs(Players:GetPlayers()) do
+            if v ~= Client then
+                table.insert(players, v)
+            end
+        end
+        for i, v in pairs(players) do
+            if v.Character ~= nil then
+                local AIM = v.Character:FindFirstChild("Head")
+                if getgenv().TeamCheck == true and v.Team ~= Client.Team then
+                    local DISTANCE = (v.Character:FindFirstChild("Head").Position - game.Workspace.CurrentCamera.CFrame.p).magnitude
+                    local RAY = Ray.new(game.Workspace.CurrentCamera.CFrame.p, (Mouse.Hit.p - game.Workspace.CurrentCamera.CFrame.p).unit * DISTANCE)
+                    local HIT,POS = game.Workspace:FindPartOnRay(RAY, game.Workspace)
+                    local DIFF = math.floor((POS - AIM.Position).magnitude)
+                    PLAYER_HOLD[v.Name .. i] = {}
+                    PLAYER_HOLD[v.Name .. i].dist= DISTANCE
+                    PLAYER_HOLD[v.Name .. i].plr = v
+                    PLAYER_HOLD[v.Name .. i].diff = DIFF
+                    table.insert(DISTANCES, DIFF)
+                elseif getgenv().TeamCheck == false and v.Team == Client.Team then 
+                    local DISTANCE = (v.Character:FindFirstChild("Head").Position - game.Workspace.CurrentCamera.CFrame.p).magnitude
+                    local RAY = Ray.new(game.Workspace.CurrentCamera.CFrame.p, (Mouse.Hit.p - game.Workspace.CurrentCamera.CFrame.p).unit * DISTANCE)
+                    local HIT,POS = game.Workspace:FindPartOnRay(RAY, game.Workspace)
+                    local DIFF = math.floor((POS - AIM.Position).magnitude)
+                    PLAYER_HOLD[v.Name .. i] = {}
+                    PLAYER_HOLD[v.Name .. i].dist= DISTANCE
+                    PLAYER_HOLD[v.Name .. i].plr = v
+                    PLAYER_HOLD[v.Name .. i].diff = DIFF
+                    table.insert(DISTANCES, DIFF)
+                end
+            end
+        end
+        
+        if unpack(DISTANCES) == nil then
+            return nil
+        end
+        
+        local L_DISTANCE = math.floor(math.min(unpack(DISTANCES)))
+        if L_DISTANCE > getgenv().AimRadius then
+            return nil
+        end
+        
+        for i, v in pairs(PLAYER_HOLD) do
+            if v.diff == L_DISTANCE then
+                return v.plr
+            end
+        end
+        return nil
     end
 
     Uis.InputBegan:connect(function(key)
         if not (Uis:GetFocusedTextBox()) then
             if key.UserInputType == Enum.UserInputType.MouseButton2 and AimlockTarget == nil then
                 pcall(function()
+                    warn'ayo'
                     if MousePressed ~= true then MousePressed = true end 
                     local Target;Target = GetNearestTarget()
                     if Target ~= nil then 
@@ -114,15 +168,14 @@ functions.ready = function()
             end
         end
         if Aimlock == true and MousePressed == true then 
-            if AimlockTarget and AimlockTarget.Character and AimlockTarget.Character:FindFirstChild(AimPart) then
-                print(FirstPerson,CanNotify,PredictMovement,Smoothness,PredictMovement,AimlockTarget)
+            if AimlockTarget and AimlockTarget.Character and AimlockTarget.Character:FindFirstChild(AimPart) then 
                 if FirstPerson == true then
                     if CanNotify == true then
                         if PredictMovement == true then
                             if Smoothness == true then
                                 --// The part we're going to lerp/smoothen \\--
                                 local Main = CF(Camera.CFrame.p, AimlockTarget.Character[AimPart].Position + AimlockTarget.Character[AimPart].Velocity/PredictionVelocity)
-
+                                
                                 --// Making it work \\--
                                 Camera.CFrame = Camera.CFrame:Lerp(Main, SmoothnessAmount, Enum.EasingStyle.Elastic, Enum.EasingDirection.InOut)
                             else
@@ -132,7 +185,7 @@ functions.ready = function()
                             if Smoothness == true then
                                 --// The part we're going to lerp/smoothen \\--
                                 local Main = CF(Camera.CFrame.p, AimlockTarget.Character[AimPart].Position)
-
+    
                                 --// Making it work \\--
                                 Camera.CFrame = Camera.CFrame:Lerp(Main, SmoothnessAmount, Enum.EasingStyle.Elastic, Enum.EasingDirection.InOut)
                             else
@@ -143,13 +196,15 @@ functions.ready = function()
                 end
             end
         end
-        if CheckIfJumped and AimlockTarget then
-            if AimlockTarget.Character.Humanoid.FloorMaterial == Enum.Material.Air then
-                AimPart = "RightFoot"
-            else
-                AimPart = OldAimPart
-            end
-        end
+         if CheckIfJumped == true then
+       if AimlockTarget.Character.Humanoid.FloorMaterial == Enum.Material.Air then
+    
+           AimPart = "RightFoot"
+       else
+         AimPart = OldAimPart
+    
+       end
+    end
     end)
 
     local AnimationModule = {
