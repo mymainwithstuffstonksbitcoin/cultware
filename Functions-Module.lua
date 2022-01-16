@@ -75,8 +75,8 @@ functions.ready = function()
 
     Uis.InputBegan:connect(function(key)
         if not (Uis:GetFocusedTextBox()) then
-            warn(key, key.KeyCode)
-            if key.KeyCode == Enum.UserInputType.MouseButton2 and AimlockTarget == nil then
+            warn(key, key.InputType)
+            if key.UserInputType == Enum.UserInputType.MouseButton2 and AimlockTarget == nil then
                 pcall(function()
                     if MousePressed ~= true then MousePressed = true end 
                     local Target;Target = GetNearestTarget()
@@ -85,7 +85,7 @@ functions.ready = function()
                         AimlockTarget = Target
                     end
                 end)
-            elseif key.KeyCode == Enum.UserInputType.MouseButton2 and AimlockTarget ~= nil then
+            elseif key.UserInputType == Enum.UserInputType.MouseButton2 and AimlockTarget ~= nil then
                 if AimlockTarget ~= nil then AimlockTarget = nil end
                 if MousePressed ~= false then 
                     MousePressed = false 
