@@ -44,7 +44,7 @@ functions.ready = function()
     local Vec3 = Vector3.new
     local Vec2 = Vector2.new
 
-    local Aimlock, MousePressed, CanNotify = false, false, false
+    local Aimlock, MousePressed, CanNotify = true, false, false
     local AimlockTarget, OldPre
 
     local CiazwareUniversalAimbotLoaded = true
@@ -75,63 +75,79 @@ functions.ready = function()
     end
 
     Mouse.KeyDown:Connect(function(a)
-        if not Uis:GetFocusedTextBox() then
+        if not (Uis:GetFocusedTextBox()) then 
             if a == AimlockKey and AimlockTarget == nil then
                 pcall(function()
-                    if MousePressed ~= true then
-                        MousePressed = true
-                    end
-                    local Target
-                    Target = GetNearestTarget()
-                    warn("TARGET",Target)
-                    if Target ~= nil then
+                    if MousePressed ~= true then MousePressed = true end 
+                    local Target;Target = GetNearestTarget()
+                    if Target ~= nil then 
                         AimlockTarget = Target
                     end
                 end)
             elseif a == AimlockKey and AimlockTarget ~= nil then
-                if AimlockTarget ~= nil then
-                    AimlockTarget = nil
-                end
-                if MousePressed ~= false then
-                    MousePressed = false
+                if AimlockTarget ~= nil then AimlockTarget = nil end
+                if MousePressed ~= false then 
+                    MousePressed = false 
                 end
             end
         end
     end)
-
+    
     RService.RenderStepped:Connect(function()
-        if ThirdPerson and FirstPerson then
-            CanNotify = (Camera.Focus.p - Camera.CoordinateFrame.p).Magnitude > 1 or (Camera.Focus.p - Camera.CoordinateFrame.p).Magnitude <= 1
-        elseif ThirdPerson and not FirstPerson then
-            CanNotify = (Camera.Focus.p - Camera.CoordinateFrame.p).Magnitude > 1
-        elseif not ThirdPerson and FirstPerson then
-            CanNotify = (Camera.Focus.p - Camera.CoordinateFrame.p).Magnitude <= 1
+        if ThirdPerson == true and FirstPerson == true then 
+            if (Camera.Focus.p - Camera.CoordinateFrame.p).Magnitude > 1 or (Camera.Focus.p - Camera.CoordinateFrame.p).Magnitude <= 1 then 
+                CanNotify = true 
+            else 
+                CanNotify = false 
+            end
+        elseif ThirdPerson == true and FirstPerson == false then 
+            if (Camera.Focus.p - Camera.CoordinateFrame.p).Magnitude > 1 then 
+                CanNotify = true 
+            else 
+                CanNotify = false 
+            end
+        elseif ThirdPerson == false and FirstPerson == true then 
+            if (Camera.Focus.p - Camera.CoordinateFrame.p).Magnitude <= 1 then 
+                CanNotify = true 
+            else 
+                CanNotify = false 
+            end
         end
+        if Aimlock == true and MousePressed == true then 
+            if AimlockTarget and AimlockTarget.Character and AimlockTarget.Character:FindFirstChild(AimPart) then 
+                if FirstPerson == true then
+                    if CanNotify == true then
+                        if PredictMovement == true then
+                            if getgenv().Smoothness == true then
+                                --// The part we're going to lerp/smoothen \\--
+                                local Main = CF(Camera.CFrame.p, AimlockTarget.Character[AimPart].Position + AimlockTarget.Character[AimPart].Velocity/PredictionVelocity)
 
-        if Aimlock and MousePressed then
-            AimlockTarget = GetNearestTarget()
-        warn(AimlockTarget,AimlockTarget and AimlockTarget.Character, FirstPerson, CanNotify)
-        end
-        if Aimlock and MousePressed and AimlockTarget and AimlockTarget.Character and AimlockTarget.Character:FindFirstChild(AimPart) and FirstPerson and CanNotify then
-            if PredictMovement then
-                if Smoothness then
-                    local Main = CF(Camera.CFrame.p, AimlockTarget.Character[AimPart].Position + AimlockTarget.Character[AimPart].Velocity / PredictionVelocity)
-                    Camera.CFrame = Camera.CFrame:Lerp(Main, SmoothnessAmount, Enum.EasingStyle.Elastic, Enum.EasingDirection.InOut)
-                else
-                    Camera.CFrame = CF(Camera.CFrame.p, AimlockTarget.Character[AimPart].Position + AimlockTarget.Character[AimPart].Velocity / PredictionVelocity)
-                end
-            else
-                if Smoothness then
-                    local Main = CF(Camera.CFrame.p, AimlockTarget.Character[AimPart].Position)
-                    Camera.CFrame = Camera.CFrame:Lerp(Main, SmoothnessAmount, Enum.EasingStyle.Elastic, Enum.EasingDirection.InOut)
-                else
-                    Camera.CFrame = CF(Camera.CFrame.p, AimlockTarget.Character[AimPart].Position)
+                                --// Making it work \\--
+                                Camera.CFrame = Camera.CFrame:Lerp(Main, SmoothnessAmount, Enum.EasingStyle.Elastic, Enum.EasingDirection.InOut)
+                            else
+                                Camera.CFrame = CF(Camera.CFrame.p, AimlockTarget.Character[AimPart].Position + AimlockTarget.Character[AimPart].Velocity/PredictionVelocity)
+                            end
+                        elseif PredictMovement == false then 
+                            if Smoothness == true then
+                                --// The part we're going to lerp/smoothen \\--
+                                local Main = CF(Camera.CFrame.p, AimlockTarget.Character[AimPart].Position)
+
+                                --// Making it work \\--
+                                Camera.CFrame = Camera.CFrame:Lerp(Main, SmoothnessAmount, Enum.EasingStyle.Elastic, Enum.EasingDirection.InOut)
+                            else
+                                Camera.CFrame = CF(Camera.CFrame.p, AimlockTarget.Character[AimPart].Position)
+                            end
+                        end
+                    end
                 end
             end
         end
-
         if CheckIfJumped and AimlockTarget then
-            AimPart = AimlockTarget.Character.Humanoid.FloorMaterial == Enum.Material.Air and "RightFoot" or OldAimPart
+            if AimlockTarget.Character.Humanoid.FloorMaterial == Enum.Material.Air then
+                AimPart = "RightFoot"
+            else
+                AimPart = OldAimPart
+            end
         end
     end)
 
