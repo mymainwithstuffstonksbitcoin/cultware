@@ -77,7 +77,7 @@ functions.ready = function()
         local distance = 99999;
         
         for i, v in next, Players:GetPlayers() do
-            if v.Name ~= lp.Name then
+            if v.Name ~= Client.Name then
                 if v.Team ~= Client.Team and v.Character then
                     local pos,aaaa = Camera:WorldToViewportPoint(v[AimPart].Position);
                     local mouse = Uis:GetMouseLocation()
@@ -97,15 +97,13 @@ functions.ready = function()
     Uis.InputBegan:connect(function(key)
         if not (Uis:GetFocusedTextBox()) then
             if key.UserInputType == Enum.UserInputType.MouseButton2 and AimlockTarget == nil then
-                pcall(function()
-                    warn'ayo'
-                    if MousePressed ~= true then MousePressed = true end 
-                    local Target;Target = GetNearestTarget()
-                    print(Target)
-                    if Target ~= nil then
-                        AimlockTarget = Target
-                    end
-                end)
+                warn'ayo'
+                if MousePressed ~= true then MousePressed = true end 
+                local Target;Target = GetNearestTarget()
+                print(Target)
+                if Target ~= nil then
+                    AimlockTarget = Target
+                end
             elseif key.UserInputType == Enum.UserInputType.MouseButton2 and AimlockTarget ~= nil then
                 if AimlockTarget ~= nil then AimlockTarget = nil end
                 if MousePressed ~= false then 
