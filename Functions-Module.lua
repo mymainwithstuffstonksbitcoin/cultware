@@ -52,27 +52,25 @@ functions.ready = function()
     local SpinBotSpeed
 
     local GetNearestTarget = function()
-        local closestPlayer = nil;
-        local shortestDistance = math.huge;
+        local plr = nil;
+        local distance = 99999;
         
         for i, v in next, Players:GetPlayers() do
-            if v.Name ~= Client.Name then
-                local char = v.Character;
-                --if char and v.Team ~= Client.Team then
-                if char then
-                    local pos = Camera:WorldToViewportPoint(char.Head.Position);
-                    warn(pos)
-                    local magnitude = (Vec2(pos.X, pos.Y) - Vec2(Mouse.X, Mouse.Y)).magnitude;
+            if v.Name ~= lp.Name then
+                if v.Character and v.Team ~= Client.Team then
+                    local pos,aaaa = Camera:WorldToViewportPoint(v.Character.Head.Position);
+                    local mouse = Uis:GetMouseLocation()
+                    local magnitude = (Vec2(pos.X, pos.Y) - Vec2(mouse.X, mouse.Y)).magnitude;
     
-                    if magnitude < shortestDistance then
-                        closestPlayer = v;
-                        shortestDistance = magnitude;
+                    if aaaa and (magnitude < distance) then
+                        plr = v;
+                        distance = magnitude;
                     end
                 end
             end
         end
         
-        return closestPlayer;
+        return plr;
     end
 
     Uis.InputBegan:connect(function(key)
