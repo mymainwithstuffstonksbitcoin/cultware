@@ -44,7 +44,7 @@ functions.ready = function()
     local Vec3 = Vector3.new
     local Vec2 = Vector2.new
 
-    local Aimlock, MousePressed, CanNotify = false, false, false
+    local Aimlock, MousePressed, CanNotify = true, false, false
     local AimlockTarget, OldPre
 
     local CiazwareUniversalAimbotLoaded = true
@@ -76,7 +76,7 @@ functions.ready = function()
 
     Mouse.KeyDown:Connect(function(a)
         if not (Uis:GetFocusedTextBox()) then 
-            if a == AimlockKey and AimlockTarget == nil then
+            if Uis:IsMouseButtonPressed(Enum.UserInputType.MouseButton2) and AimlockTarget == nil then
                 pcall(function()
                     if MousePressed ~= true then MousePressed = true end 
                     local Target;Target = GetNearestTarget()
@@ -84,7 +84,7 @@ functions.ready = function()
                         AimlockTarget = Target
                     end
                 end)
-            elseif a == AimlockKey and AimlockTarget ~= nil then
+            elseif Uis:IsMouseButtonPressed(Enum.UserInputType.MouseButton2) and AimlockTarget ~= nil then
                 if AimlockTarget ~= nil then AimlockTarget = nil end
                 if MousePressed ~= false then 
                     MousePressed = false 
@@ -118,7 +118,7 @@ functions.ready = function()
                 if FirstPerson == true then
                     if CanNotify == true then
                         if PredictMovement == true then
-                            if getgenv().Smoothness == true then
+                            if Smoothness == true then
                                 --// The part we're going to lerp/smoothen \\--
                                 local Main = CF(Camera.CFrame.p, AimlockTarget.Character[AimPart].Position + AimlockTarget.Character[AimPart].Velocity/PredictionVelocity)
 
