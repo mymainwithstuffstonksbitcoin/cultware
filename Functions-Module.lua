@@ -57,7 +57,7 @@ functions.ready = function()
         
         for i, v in next, Players:GetPlayers() do
             if v.Name ~= lp.Name then
-                if v.Character and v.Team ~= Client.Team then
+                if v.Character and Client.Team ~= Client.Team then
                     local pos,aaaa = Camera:WorldToViewportPoint(v.Character.Head.Position);
                     local mouse = Uis:GetMouseLocation()
                     local magnitude = (Vec2(pos.X, pos.Y) - Vec2(mouse.X, mouse.Y)).magnitude;
