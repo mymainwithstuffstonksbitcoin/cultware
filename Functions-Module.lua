@@ -196,7 +196,7 @@ functions.ready = function()
                 end
             end
         end
-         if CheckIfJumped == true then
+         if CheckIfJumped == true and AimlockTarget then
        if AimlockTarget.Character.Humanoid.FloorMaterial == Enum.Material.Air then
     
            AimPart = "RightFoot"
