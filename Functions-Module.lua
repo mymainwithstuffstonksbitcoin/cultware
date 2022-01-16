@@ -44,7 +44,7 @@ functions.ready = function()
     local Vec3 = Vector3.new
     local Vec2 = Vector2.new
 
-    local Aimlock, MousePressed, CanNotify = true, false, false
+    local Aimlock, MousePressed, CanNotify = false, false, false
     local AimlockTarget, OldPre
 
     local CiazwareUniversalAimbotLoaded = true
