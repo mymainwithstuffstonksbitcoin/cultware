@@ -76,7 +76,6 @@ functions.ready = function()
     Uis.InputBegan:connect(function(key)
         if not (Uis:GetFocusedTextBox()) then
             if key.UserInputType == Enum.UserInputType.MouseButton2 and AimlockTarget == nil then
-                warn'ayo'
                 if MousePressed ~= true then MousePressed = true end 
                 local Target;Target = GetNearestTarget()
                 print(Target)
@@ -116,6 +115,7 @@ functions.ready = function()
             if AimlockTarget and AimlockTarget.Character and AimlockTarget.Character:FindFirstChild(AimPart) then 
                 if FirstPerson == true then
                     if CanNotify == true then
+                        warn'modding'
                         if PredictMovement == true then
                             if Smoothness == true then
                                 --// The part we're going to lerp/smoothen \\--
