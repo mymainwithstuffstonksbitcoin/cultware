@@ -45,8 +45,8 @@ ui.ready = function()
     local sector24 = tab5:CreateSector("Character")
     local AnimationSector = tab5:CreateSector("Animations", "Right")
 
-    local AimingToggle = sector1:AddToggle("Enabled", false, functions.AimingToggle)
-    local AssistToggle = sector1:AddToggle("Assistance", false, functions.AssistToggle)
+ sector1:AddToggle("Enabled", false, functions.AimingToggle)
+ sector1:AddToggle("Assistance", false, functions.AssistToggle)
     
 
     ui.debug("Loaded!")
