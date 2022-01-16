@@ -75,7 +75,6 @@ functions.ready = function()
 
     Uis.InputBegan:connect(function(key)
         if not (Uis:GetFocusedTextBox()) then
-            warn(key, key.InputType)
             if key.UserInputType == Enum.UserInputType.MouseButton2 and AimlockTarget == nil then
                 pcall(function()
                     if MousePressed ~= true then MousePressed = true end 
