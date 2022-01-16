@@ -73,9 +73,10 @@ functions.ready = function()
         return closestPlayer;
     end
 
-    Mouse.KeyDown:Connect(function(a)
-        if not (Uis:GetFocusedTextBox()) then 
-            if Uis:IsMouseButtonPressed(Enum.UserInputType.MouseButton2) and AimlockTarget == nil then
+    Uis.InputBegan:connect(function(key)
+        if not (Uis:GetFocusedTextBox()) then
+            print(key.KeyCode == Enum.UserInputType.MouseButton2)
+            if key.KeyCode == Enum.UserInputType.MouseButton2 and AimlockTarget == nil then
                 pcall(function()
                     if MousePressed ~= true then MousePressed = true end 
                     local Target;Target = GetNearestTarget()
@@ -84,7 +85,7 @@ functions.ready = function()
                         AimlockTarget = Target
                     end
                 end)
-            elseif Uis:IsMouseButtonPressed(Enum.UserInputType.MouseButton2) and AimlockTarget ~= nil then
+            elseif key.KeyCode == Enum.UserInputType.MouseButton2 and AimlockTarget ~= nil then
                 if AimlockTarget ~= nil then AimlockTarget = nil end
                 if MousePressed ~= false then 
                     MousePressed = false 
