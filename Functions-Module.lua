@@ -75,7 +75,7 @@ functions.ready = function()
 
     Uis.InputBegan:connect(function(key)
         if not (Uis:GetFocusedTextBox()) then
-            print(key.KeyCode == Enum.UserInputType.MouseButton2)
+            print(key.KeyCode == Enum.UserInputType.MouseButton2.KeyCode)
             if key.KeyCode == Enum.UserInputType.MouseButton2 and AimlockTarget == nil then
                 pcall(function()
                     if MousePressed ~= true then MousePressed = true end 
