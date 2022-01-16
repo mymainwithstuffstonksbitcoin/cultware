@@ -51,14 +51,14 @@ functions.ready = function()
     local Target, PartMode, Partz, NotifMode, Prediction
     local SpinBotSpeed
 
-    --[[local GetNearestTarget = function()
+    local GetNearestTarget = function()
         local closestPlayer = nil;
         local shortestDistance = math.huge;
         
         for i, v in next, Players:GetPlayers() do
-            if v.Name ~= lp.Name then
+            if v.Name ~= Client.Name then
                 local char = v.Character;
-                if char and v.Team ~= lp.Team then
+                if char and v.Team ~= Client.Team then
                     local pos = Camera:WorldToViewportPoint(char.HumanoidRootPart.Position);
                     local magnitude = (Vec2(pos.X, pos.Y) - Vec2(Mouse.X, Mouse.Y)).magnitude;
     
@@ -71,27 +71,6 @@ functions.ready = function()
         end
         
         return closestPlayer;
-    end]]
-    local function GetNearestTarget()
-        local plr = nil;
-        local distance = 99999;
-        
-        for i, v in next, Players:GetPlayers() do
-            if v.Name ~= Client.Name then
-                if v.Team ~= Client.Team and v.Character then
-                    local pos,aaaa = Camera:WorldToViewportPoint(v[AimPart].Position);
-                    local mouse = Uis:GetMouseLocation()
-                    local magnitude = (Vec2(pos.X, pos.Y) - Vec2(mouse.X, mouse.Y)).magnitude;
-    
-                    if aaaa and (magnitude < distance) then
-                        plr = v;
-                        distance = magnitude;
-                    end
-                end
-            end
-        end
-        
-        return plr;
     end
 
     Uis.InputBegan:connect(function(key)
