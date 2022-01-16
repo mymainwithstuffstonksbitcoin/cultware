@@ -60,7 +60,7 @@ functions.ready = function()
                 local char = v.Character;
                 --if char and v.Team ~= Client.Team then
                 if char then
-                    local pos = Camera:WorldToViewportPoint(char.PrimaryPart.Position);
+                    local pos = Camera:WorldToViewportPoint(char.Head.Position);
                     warn(pos)
                     local magnitude = (Vec2(pos.X, pos.Y) - Vec2(Mouse.X, Mouse.Y)).magnitude;
     
