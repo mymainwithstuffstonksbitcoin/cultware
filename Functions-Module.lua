@@ -9,8 +9,7 @@ end
 functions.ready = function()
     functions.debug("Starting...")
 
-    local OldAimPart = "Head"
-    local Hitbox = "Head"
+    local AimPart = "Head"
     local AimRadius = 30
     local ThirdPerson = true
     local FirstPerson = true
@@ -18,8 +17,8 @@ functions.ready = function()
     local PredictMovement = true
     local PredictionVelocity = 10
     local CheckIfJumped = true
-    local Smoothness = false
-    local SmoothnessAmount = 0.035
+    local Assistance = false
+    local AssistanceAmount = 0.035
     local FakeLagSpeed = 0.000001
 
     local services = setmetatable({ }, {
@@ -112,28 +111,27 @@ functions.ready = function()
             end
         end
         if Aimlock == true and MousePressed == true then 
-            if AimlockTarget and AimlockTarget.Character and AimlockTarget.Character:FindFirstChild(Hitbox) then 
+            if AimlockTarget and AimlockTarget.Character and AimlockTarget.Character:FindFirstChild(AimPart) then 
                 if FirstPerson == true then
                     if CanNotify == true then
                         if PredictMovement == true then
-                            if Smoothness == true then
-                                --// The part we're going to lerp/smoothen \\--
-                                local Main = CF(Camera.CFrame.p, AimlockTarget.Character[Hitbox].Position + AimlockTarget.Character[AimPart].Velocity/PredictionVelocity)
+                            if Assistance == true then
+  
+                                local Main = CF(Camera.CFrame.p, AimlockTarget.Character[AimPart].Position + AimlockTarget.Character[AimPart].Velocity/PredictionVelocity)
                                 
-                                --// Making it work \\--
-                                Camera.CFrame = Camera.CFrame:Lerp(Main, SmoothnessAmount, Enum.EasingStyle.Elastic, Enum.EasingDirection.InOut)
+    
+                                Camera.CFrame = Camera.CFrame:Lerp(Main, AssistanceAmount, Enum.EasingStyle.Elastic, Enum.EasingDirection.InOut)
                             else
-                                Camera.CFrame = CF(Camera.CFrame.p, AimlockTarget.Character[Hitbox].Position + AimlockTarget.Character[AimPart].Velocity/PredictionVelocity)
+                                Camera.CFrame = CF(Camera.CFrame.p, AimlockTarget.Character[AimPart].Position + AimlockTarget.Character[AimPart].Velocity/PredictionVelocity)
                             end
                         elseif PredictMovement == false then 
-                            if Smoothness == true then
-                                --// The part we're going to lerp/smoothen \\--
-                                local Main = CF(Camera.CFrame.p, AimlockTarget.Character[Hitbox].Position)
-    
-                                --// Making it work \\--
-                                Camera.CFrame = Camera.CFrame:Lerp(Main, SmoothnessAmount, Enum.EasingStyle.Elastic, Enum.EasingDirection.InOut)
+                            if Assistance == true then
+          
+                                local Main = CF(Camera.CFrame.p, AimlockTarget.Character[AimPart].Position)
+    -
+                                Camera.CFrame = Camera.CFrame:Lerp(Main, AssistanceAmount, Enum.EasingStyle.Elastic, Enum.EasingDirection.InOut)
                             else
-                                Camera.CFrame = CF(Camera.CFrame.p, AimlockTarget.Character[Hitbox].Position)
+                                Camera.CFrame = CF(Camera.CFrame.p, AimlockTarget.Character[AimPart].Position)
                             end
                         end
                     end
@@ -425,7 +423,7 @@ functions.ready = function()
     end
 
     functions.AssistToggle = function(AssistT)
-        Smoothness = AssistT 
+        Assistance = AssistT 
     end
 
     functions.CheckPredictionA = function(PredictionA)
